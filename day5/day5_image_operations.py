@@ -1,48 +1,38 @@
 import cv2
-import os
 
-# Setup paths
-script_dir = os.path.dirname(os.path.abspath(__file__))
-image_path = os.path.join(script_dir, 'sample.jpg')
-output_dir = os.path.join(script_dir, 'output')
-os.makedirs(output_dir, exist_ok=True)
+# Load the image
+image = cv2.imread('sample.jpg')
 
-# Load image
-image = cv2.imread(image_path)
+# Check if the image was loaded properly
 if image is None:
-    print(f"Error: Could not load image at {image_path}")
-    exit(1)
+    print("Error: Image not found or path is incorrect.")
+else:
+    # Convert to grayscale
+    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-# Convert to grayscale and back to BGR to allow colored shapes
-gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-gray_bgr = cv2.cvtColor(gray, cv2.COLOR_GRAY2BGR)
+    # Resize the grayscale image to 500x500
+    resized_gray = cv2.resize(gray_image, (500, 500))
 
-# Get image dimensions
-height, width = gray_bgr.shape[:2]
+    # Convert grayscale back to BGR so we can draw in color
+    image_with_drawing = cv2.cvtColor(resized_gray, cv2.COLOR_GRAY2BGR)
 
-# Draw shapes for design
-cv2.rectangle(gray_bgr, (30, 30), (width - 30, height - 30), (0, 255, 255), 4)  # Border rectangle
-cv2.circle(gray_bgr, (width // 2, height // 3), 60, (100, 100, 255), -1)        # Filled circle in upper third
+    # Draw a blue rectangle (x1, y1), (x2, y2)
+    cv2.rectangle(image_with_drawing, (50, 50), (450, 150), (255, 0, 0), 2)
 
-# Add centered text
-text = "JC ESCARIO"
-font = cv2.FONT_HERSHEY_DUPLEX
-font_scale = 2
-thickness = 3
-(text_width, text_height), _ = cv2.getTextSize(text, font, font_scale, thickness)
-text_x = (width - text_width) // 2
-text_y = (height + text_height) // 2
-cv2.putText(gray_bgr, text, (text_x, text_y), font, font_scale, (255, 255, 255), thickness)
+    # Draw a green circle at center (x, y), radius
+    cv2.circle(image_with_drawing, (250, 300), 50, (0, 255, 0), 3)
 
-# Resize for preview
-resized = cv2.resize(gray_bgr, (width // 2, height // 2), interpolation=cv2.INTER_AREA)
+    # Write white text
+    cv2.putText(image_with_drawing, 'Day 5: JC ESCARIO', (90, 120),
+                cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
 
-# Save outputs
-cv2.imwrite(os.path.join(output_dir, 'gray.jpg'), gray)
-cv2.imwrite(os.path.join(output_dir, 'gray_shapes_text.jpg'), gray_bgr)
-cv2.imwrite(os.path.join(output_dir, 'gray_resized.jpg'), resized)
+    # Display all images
+    cv2.imshow('Original Image', image)
+    cv2.imshow('Grayscale + Drawings', image_with_drawing)
 
-# Display
-cv2.imshow('Styled JC ESCARIO Image', gray_bgr)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+    # Save the final image
+    cv2.imwrite('output/day5_gray_with_shapes.jpg', image_with_drawing)
+
+    # Wait for a key press and close all windows
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
