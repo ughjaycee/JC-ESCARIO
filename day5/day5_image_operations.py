@@ -10,16 +10,16 @@ else:
     # Convert to grayscale
     gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-    # Resize the grayscale image to 500x500
+    # Resize the grayscale image
     resized_gray = cv2.resize(gray_image, (500, 500))
 
     # Convert grayscale back to BGR so we can draw in color
     image_with_drawing = cv2.cvtColor(resized_gray, cv2.COLOR_GRAY2BGR)
 
-    # Draw a blue rectangle (x1, y1), (x2, y2)
+    # Draw a blue rectangle
     cv2.rectangle(image_with_drawing, (50, 50), (450, 150), (255, 0, 0), 2)
 
-    # Draw a green circle at center (x, y), radius
+    # Draw a green circle at center
     cv2.circle(image_with_drawing, (250, 300), 50, (0, 255, 0), 3)
 
     # Write white text
