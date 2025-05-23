@@ -11,19 +11,15 @@ else:
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     cv2.imwrite('output/gray_sample.jpg', gray)
 
-    # 2. Apply Gaussian Blur
     blurred = cv2.GaussianBlur(gray, (7, 7), 0)
     cv2.imwrite('output/blurred_sample.jpg', blurred)
 
-    # 3. Apply Canny Edge Detection
     edges = cv2.Canny(blurred, 50, 150)
     cv2.imwrite('output/edges_sample.jpg', edges)
 
-    # 4. Apply Binary Thresholding
     _, thresholded = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
     cv2.imwrite('output/thresholded_sample.jpg', thresholded)
 
-    # Show all results
     cv2.imshow("Original", image)
     cv2.imshow("Gray", gray)
     cv2.imshow("Blurred", blurred)
